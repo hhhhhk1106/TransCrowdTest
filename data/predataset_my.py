@@ -6,14 +6,14 @@ import h5py
 import numpy as np
 import scipy.io
 import scipy.spatial
-from scipy.ndimage.filters import gaussian_filter
+from scipy.ndimage import gaussian_filter
 import math
 import torch
 
 import glob
 '''change your dataset'''
 # root = '/home/dkliang/projects/synchronous/dataset/UCF-QNRF_ECCV18'
-root = '/content/TransCrowd/dataset'
+root = '/content/TransCrowdTest/dataset'
 img_train_path = root + '/Train/'
 img_test_path = root + '/Test/'
 
@@ -28,9 +28,13 @@ img_test = []
 
 path_sets = [img_train_path, img_test_path]
 
+print(len(path_sets))
+
+
 img_paths = []
 for path in path_sets:
     for img_path in glob.glob(os.path.join(path, '*.jpg')):
+        # print('a')
         img_paths.append(img_path)
 
 img_paths.sort()
