@@ -39,6 +39,9 @@ def main(args):
     elif args['dataset'] == 'NWPU':
         train_file = './npydata/nwpu_train.npy'
         test_file = './npydata/nwpu_val.npy'
+    elif args['dataset'] == 'myData':
+        train_file = './npydata/my_train.npy'
+        test_file = './npydata/my_test.npy'
 
     with open(train_file, 'rb') as outfile:
         train_list = np.load(outfile).tolist()
