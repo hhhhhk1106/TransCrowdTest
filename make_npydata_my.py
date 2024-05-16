@@ -7,8 +7,8 @@ if not os.path.exists('./npydata'):
 
 '''please set your dataset path'''
 try:
-    my_train_path = '/content/TransCrowd/dataset/train_data/images/'
-    my_test_path = '/content/TransCrowd/dataset/test_data/images/'
+    my_train_path = '/content/TransCrowdTest/dataset/train_data/images/'
+    my_test_path = '/content/TransCrowdTest/dataset/test_data/images/'
 
     train_list = []
     for filename in os.listdir(my_train_path):
