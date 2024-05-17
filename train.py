@@ -88,8 +88,15 @@ def main(args):
     torch.set_num_threads(args['workers'])
 
     print(args['best_pred'], args['start_epoch'])
-    train_data = pre_data(train_list, args, train=True)
-    test_data = pre_data(val_list, args, train=False)
+    # train_data = pre_data(train_list, args, train=True)
+    # test_data = pre_data(val_list, args, train=False)
+
+    # 根据数据列表创建训练集和验证集
+    train_size = int(0.8 * len(train_list))
+    val_size = len(train_list) - train_size
+
+    train_data = pre_data(train_list[:train_size], args, train=True)
+    test_data = pre_data(train_list[train_size:], args, train=False)
 
     for epoch in range(args['start_epoch'], args['epochs']):
 
@@ -147,6 +154,7 @@ def train(Pre_data, model, criterion, optimizer, epoch, args, scheduler):
         dataset.listDataset(Pre_data, args['save_path'],
                             shuffle=True,
                             transform=transforms.Compose([
+                                transforms.Resize((384, 384)),
                                 transforms.ToTensor(),
 
                                 transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -169,7 +177,14 @@ def train(Pre_data, model, criterion, optimizer, epoch, args, scheduler):
         img = img.cuda()
 
         out1 = model(img)
+        out1 = out1.unsqueeze(2).unsqueeze(3)
+        # out1 = out1.expand_as(gt_count)
+        out1 = out1.expand(-1, 1, 512, 640)
         gt_count = gt_count.type(torch.FloatTensor).cuda().unsqueeze(1)
+
+        print("Out1 shape:", out1.shape)
+        print("gt_count shape:", gt_count.shape)
+
 
         # print(out1.shape, kpoint.shape)
         loss = criterion(out1, gt_count)

@@ -15,7 +15,7 @@ def load_data(img_path, args, train=True):
     while True:
         try:
             gt_file = h5py.File(gt_path)
-            gt_count = np.asarray(gt_file['gt_count'])
+            gt_count = np.asarray(gt_file['density'])
             break  # Success!
         except OSError:
             print("load error:", img_path)
