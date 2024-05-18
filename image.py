@@ -9,16 +9,16 @@ import random
 
 def load_data(img_path, args, train=True):
 
-    gt_path = img_path.replace('.jpg', '.h5').replace('images', 'gt_density_map')
+    gt_path = img_path.replace('.jpg', '.h5').replace('images', 'gt_density_map').replace('train_data','my_train_data')
     img = Image.open(img_path).convert('RGB')
 
     while True:
         try:
             gt_file = h5py.File(gt_path)
-            gt_count = np.asarray(gt_file['density'])
+            gt_count = np.asarray(gt_file['gt_count'])
             break  # Success!
         except OSError:
-            print("load error:", img_path)
+            print("load error:", gt_path)
             cv2.waitKey(1000)  # Wait a bit
 
     img = img.copy()
