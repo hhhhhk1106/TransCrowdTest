@@ -9,6 +9,8 @@ import scipy.spatial
 from scipy.ndimage import gaussian_filter
 import math
 import torch
+import random
+import xml.etree.ElementTree as ET
 
 import glob
 '''change your dataset'''
@@ -34,19 +36,35 @@ print(len(path_sets))
 img_paths = []
 for path in path_sets:
     for img_path in glob.glob(os.path.join(path, '*.jpg')):
-        # print('a')
         img_paths.append(img_path)
 
 img_paths.sort()
 
-
+np.random.seed(0)
+random.seed(0)
 for img_path in img_paths:
 
 
     Img_data = cv2.imread(img_path)
-    Gt_data = scipy.io.loadmat(img_path.replace('.jpg', '_ann.mat'))
+    # Gt_data = scipy.io.loadmat(img_path.replace('.jpg', '_ann.mat'))
+    # Gt_data = Gt_data['annPoints']
+    xml_file = img_path.replace('.jpg', 'R.xml').replace('images', 'labels')
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
+    width = int(root.find('size/width').text)
+    height = int(root.find('size/height').text)
+    Gt_data = []
 
-    Gt_data = Gt_data['annPoints']
+    for obj in root.findall('object'):
+        x = int(obj.find('point/x').text)
+        y = int(obj.find('point/y').text)
+        
+        # 将坐标点添加到 Gt_data 中，可以选择如何存储，例如列表、数组等
+        Gt_data.append([x, y])
+
+    # 将 Gt_data 转换为 numpy 数组（可选）
+    Gt_data = np.array(Gt_data)
+
 
     if Img_data.shape[1] >= Img_data.shape[0]:
         rate_1 = 1152.0 / Img_data.shape[1]

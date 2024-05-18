@@ -182,8 +182,8 @@ def train(Pre_data, model, criterion, optimizer, epoch, args, scheduler):
         out1 = out1.expand(-1, 1, 512, 640)
         gt_count = gt_count.type(torch.FloatTensor).cuda().unsqueeze(1)
 
-        print("Out1 shape:", out1.shape)
-        print("gt_count shape:", gt_count.shape)
+        # print("Out1 shape:", out1.shape)
+        # print("gt_count shape:", gt_count.shape)
 
 
         # print(out1.shape, kpoint.shape)
